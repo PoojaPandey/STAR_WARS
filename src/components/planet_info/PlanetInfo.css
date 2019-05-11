@@ -1,0 +1,51 @@
+.PlanetInfoBase {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.InnerBase {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  top: 15%;
+  bottom: 15%;
+  border-radius: 20px;
+  background-color: red;
+}
+
+.Row {
+  flex-direction: row;
+  display: flex;
+}
+.Image {
+  width: 90%;
+  height: 90%;
+  border-radius: 20px;
+}
+.PlanetImage {
+  width: 40px;
+  height: 450px;
+  flex: 1;
+  align-content: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.PlanetDetail {
+  left: 10px;
+  flex: 1;
+  background-color: aqua;
+}
+
+.Button {
+  position: absolute;
+  padding: 2px 5px;
+  right: -8px;
+  top: -8px;
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+  border-radius: 10px;
+}

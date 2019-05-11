@@ -1,0 +1,13 @@
+.NavBar {
+  height: 60px;
+  background-color: red;
+  align-items: center;
+  justify-content: center;
+}
+
+.Welcome {
+  justify-content: 'center';
+  align-items: 'center';
+  flex: 1;
+  width: '100%';
+}

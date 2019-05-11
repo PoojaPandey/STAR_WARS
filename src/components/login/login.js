@@ -4,6 +4,8 @@ import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Webservice from '../../services/Service';
 import * as constant from '../../utils/Constant';
+import { browserHistory } from 'react-router';
+import * as LocalStorage from '../../shared/LocalStorage';
 
 /**
  * This class is for Login screen
@@ -21,8 +23,30 @@ class Login extends Component {
     };
   }
 
+  componentWillMount() {
+    console.log('LocalStorage', LocalStorage.getUser());
+  }
+  authSetting = props => LocalStorage.setUser(props);
+
   successCall = response => {
     console.log('response', response);
+
+    const result = response['results'];
+
+    const { password } = this.state;
+    if (result[0] !== null) {
+      if (password === result[0].birth_year) {
+        console.log('password ===', password);
+        const userData = result[0];
+        this.authSetting(userData.name);
+        this.setState({ username: null, password: null });
+        browserHistory.push('/SearchScreen');
+      } else {
+        alert('Wrong username or password');
+      }
+    } else {
+      alert('Wrong username or password');
+    }
   };
 
   errorCall = error => {
@@ -30,7 +54,7 @@ class Login extends Component {
   };
   validation() {
     const { username, password } = this.state;
-    if (username.length === 0 || password.length === 0) {
+    if (username.length <= 0 || password.length <= 0) {
       return false;
     } else {
       return true;
@@ -38,7 +62,7 @@ class Login extends Component {
   }
 
   handleClick(event) {
-    const { username, password } = this.state;
+    const { username } = this.state;
     if (this.validation()) {
       const url = constant.LOGIN + username;
       Webservice({ url: url, successCall: this.successCall });
