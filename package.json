@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.3",
+    "@sentry/browser": "^5.2.0",
     "@version/react-router-v3": "^1.0.0",
     "axios": "^0.18.0",
     "material-ui": "^0.20.2",

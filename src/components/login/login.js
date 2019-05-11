@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './Login.css';
-import TextField from 'material-ui/TextField';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Webservice from '../../services/Service';
 import * as constant from '../../utils/Constant';
 import { browserHistory } from 'react-router';
 import * as LocalStorage from '../../shared/LocalStorage';
+import video from '../../assets/images/Galaxy.mp4';
+import * as Sentry from '@sentry/browser';
 
 /**
  * This class is for Login screen
@@ -23,16 +23,25 @@ class Login extends Component {
     };
   }
 
+  /**
+   * Component Will Mount method
+   * Checking in log getUser methods details.
+   */
   componentWillMount() {
     console.log('LocalStorage', LocalStorage.getUser());
   }
-  authSetting = props => LocalStorage.setUser(props);
 
-  successCall = response => {
+  /**
+   * Auth Setting for setting user props.
+   */
+  authSetting = (props) => LocalStorage.setUser(props);
+
+  /**
+   * To check succesfull response.
+   */
+  successCall = (response) => {
     console.log('response', response);
-
     const result = response['results'];
-
     const { password } = this.state;
     if (result[0] !== null) {
       if (password === result[0].birth_year) {
@@ -49,9 +58,16 @@ class Login extends Component {
     }
   };
 
-  errorCall = error => {
+  /**
+   * Logging error to console.
+   */
+  errorCall = (error) => {
     console.log(error);
   };
+
+  /**
+   * Validation method to validate the user and password.
+   */
   validation() {
     const { username, password } = this.state;
     if (username.length <= 0 || password.length <= 0) {
@@ -61,6 +77,9 @@ class Login extends Component {
     }
   }
 
+  /**
+   * Handlle button click even of Login button.
+   */
   handleClick(event) {
     const { username } = this.state;
     if (this.validation()) {
@@ -71,43 +90,53 @@ class Login extends Component {
     }
   }
 
+  /**
+   * Handle error at the component level.
+   * Making use of Sentry API to sending error
+   * log to server with all details.
+   * @param {*} error erro occured
+   * @param {*} errorInfo detaild infor about the error.
+   */
+  componentDidCatch(error, errorInfo) {
+    console.log(error, errorInfo);
+    this.setState({ error });
+    Sentry.withScope((scope) => {
+      scope.setExtras(errorInfo);
+      const eventId = Sentry.captureException(error);
+      this.setState({ eventId });
+    });
+  }
+
+  /**
+   * Method to render the UI.
+   */
   render() {
     return (
-      <div className="LoginBody">
-        <MuiThemeProvider>
-          <img
-            className="StartWarLooStyle"
-            src={require('../../assets/images/star_wars_logo_2.png')}
-            alt="logo"
-          />
-          <div className="LoginBase">
-            <TextField
-              error
-              hintText="Enter your Username"
-              floatingLabelText="Username"
-              onChange={(event, newValue) =>
-                this.setState({ username: newValue })
-              }
-              fullWidth
+      <div className="LoginBody wrapper">
+        <img
+          className="StartWarLooStyle"
+          src={require('../../assets/images/star_wars_logo_2.png')}
+          alt="logo"
+        />
+        <div id="formContent">
+          <form>
+            <input
+              type="text"
+              id="login"
+              className="fadeIn second"
+              name="login"
+              placeholder="login"
             />
-            <TextField
-              className="TextFieldStyle"
-              type="password"
-              hintText="Enter your Password"
-              floatingLabelText="Password"
-              onChange={(event, newValue) =>
-                this.setState({ password: newValue })
-              }
-              fullWidth
+            <input
+              type="text"
+              id="password"
+              className="fadeIn third"
+              name="login"
+              placeholder="password"
             />
-            <button
-              className="btn btn-danger btn-lg"
-              onClick={event => this.handleClick(event)}
-            >
-              LOGIN
-            </button>
-          </div>
-        </MuiThemeProvider>
+            <input type="submit" className="fadeIn fourth" value="Log In" />
+          </form>
+        </div>
       </div>
     );
   }

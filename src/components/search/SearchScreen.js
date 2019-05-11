@@ -43,7 +43,7 @@ class SearchSreen extends Component {
   }
 
   componentWillMount() {
-    this.scrollListner = window.addEventListener('scroll', e => {
+    this.scrollListner = window.addEventListener('scroll', (e) => {
       this.handelScroll(e);
       console.log('handelScroll added');
     });
@@ -70,7 +70,7 @@ class SearchSreen extends Component {
     const url = Constant.BASE_URL + `planets/?page=${this.state.page}`;
     Webservice({
       url: url,
-      successCall: data => {
+      successCall: (data) => {
         this.setState({
           wholePlanetList: [...this.state.wholePlanetList, ...data.results],
           results: [...this.state.wholePlanetList, ...data.results],
@@ -117,7 +117,7 @@ class SearchSreen extends Component {
     return true;
   }
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     if (!this.state.isTimerRunning) {
       this.setState({ isTimerRunning: true });
       this.startTimer();
@@ -134,7 +134,7 @@ class SearchSreen extends Component {
             const url = Constant.PLANET + this.state.query;
             Webservice({
               url: url,
-              successCall: data => {
+              successCall: (data) => {
                 this.setState({
                   results: data.results,
                   nextPageUrl: data.next
@@ -166,32 +166,36 @@ class SearchSreen extends Component {
     });
   };
 
+  componentDidCatch(error, info) {
+    console.log(error, info);
+  }
+
   render() {
     const popup = this.state.showPopup ? (
-      <PlanetInfo
-        value={this.state.planetInfo}
-        hidePlanetInfo={this.hidePlanetInfo}
-      />
+      <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
     ) : null;
     return (
-      <form>
-        <div className="card-header NavBar w3-bar sticky-top">
-          {/* <div className="mx-auto"> */}
-          <h2 className="text-center">Whecome {LocalStorage.getUser()}</h2>
-          {/* </div> */}
-          <button>Logout</button>
+      <div>
+        <nav className="navbar navbar-light bg-dark justify-content-between ">
+          <h2 className="text-center">Welcome {LocalStorage.getUser()}</h2>
+          <form className="form-inline ">
+            <input
+              className="form-control mr-sm-2"
+              placeholder="Search for..."
+              onChange={this.handleInputChange}
+              disabled={this.state.searchDisable}
+            />
+            <button className="btn btn-outline-danger my-2 my-sm-0 glyphicon">
+              <span className="glyphicon glyphicon-user" />
+              Logout
+            </button>
+          </form>
+        </nav>
+        <div className="container">
+          {popup}
+          <PlanetList planetList={this.state.results} showPlanetInfo={this.showPlanetInfo} />
         </div>
-        {popup}
-        <input
-          placeholder="Search for..."
-          onChange={this.handleInputChange}
-          disabled={this.state.searchDisable}
-        />
-        <PlanetList
-          planetList={this.state.results}
-          showPlanetInfo={this.showPlanetInfo}
-        />
-      </form>
+      </div>
     );
   }
 }
