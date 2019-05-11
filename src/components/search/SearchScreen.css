@@ -1,8 +1,9 @@
 .SearchScreenBody {
-  background-image: url('../../assets/images/Startwar_SearchCSreen.jpg');
+  /* background-image: url('../../assets/images/Startwar_SearchCSreen.jpg'); */
   background-size: cover;
   height: 100vh;
-  overflow: hidden;
+  /* overflow: scroll; */
+  background-color: black;
   font-family: Arial, Helvetica, sans-serif;
   /* height: 100% !important; */
 }

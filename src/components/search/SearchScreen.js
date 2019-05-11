@@ -170,9 +170,10 @@ class SearchSreen extends Component {
 
   logoutClicked() {
     if (window.confirm('Are you sure you want to Logout?')) {
-      LocalStorage.setUser("")
+      LocalStorage.setUser('');
       // browserHistory.push("/");
-    }  }
+    }
+  }
 
   render() {
     const popup = this.state.showPopup ? (

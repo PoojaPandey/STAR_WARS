@@ -5,13 +5,14 @@
   background-color: rgba(12, 11, 9, 0.8);
   text-align: center;
   color: rgb(7, 5, 0);
+  top: 0px;
 }
 
 .InnerBase {
   position: absolute;
   left: 20%;
   right: 20%;
-  top: 10%;
+  top: 15%;
   bottom: 15%;
   border-radius: 20px;
   background-color: rgb(224, 171, 71);
