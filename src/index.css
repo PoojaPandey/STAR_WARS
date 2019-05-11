@@ -6,6 +6,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url(/src/assets/images/Star-Wars-The-Last-Jedi-movie-poster-2017.png);
+  background-size: cover;
 }
 
 code {

@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Login from "./components/Login/Login";
+import "../src/utils/bootstrap.min.css";
+import { AuthProvider } from '../src/shared/auth/AuthContext'
+import SearchScreen from "./components/search/SearchScreen";
+import { Router, Route, browserHistory } from 'react-router';
+
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return(
+  <Router history={browserHistory}>
+  <AuthProvider>
+    <Route path='/' component={Login} />
+    <Route path='/SearchScreen' component={SearchScreen} />
+  </AuthProvider>
+</Router>
+);
 }
 
 export default App;
