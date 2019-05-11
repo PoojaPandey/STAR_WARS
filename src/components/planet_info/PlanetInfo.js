@@ -13,7 +13,11 @@ function PlanetInfo(props) {
   return (
     <div className="PlanetInfoBase">
       <div className="InnerBase">
-        {/* <h1 style={{ color: 'white' }}>{planet.name}</h1> */}
+        <u>
+          <i>
+            <h1>Planet Inforamtion</h1>
+          </i>
+        </u>
         <button className="Button" onClick={props.hidePlanetInfo}>
           X
         </button>
@@ -29,10 +33,15 @@ function PlanetInfo(props) {
           </div>
           <div className="PlanetDetail">
             {console.log('planet.name', planet.name)}
-            <h1 style={{ color: 'white' }}>{planet.name}</h1>
+            {Object.keys(planet).map((item, index) => (
+              <h6 key={item}>
+                {item}:{planet[item]}
+              </h6>
+            ))}
+            {/* <h1 style={{ color: 'white' }}>{planet.name}</h1>
             <h2>{planet.rotation_period}</h2>
             <h1>{planet.orbital_period}</h1>
-            <h1>{planet.diameter}</h1>
+            <h1>{planet.diameter}</h1> */}
           </div>
         </div>
       </div>
