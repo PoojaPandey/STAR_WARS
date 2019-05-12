@@ -11,7 +11,7 @@ body > #root > div {
   height: 100vh;
 }
 .NavBarColor {
-  background-color: rgb(17, 15, 15);
+  background-color: rgb(56, 55, 55);
 }
 
 .Welcome {
@@ -26,4 +26,9 @@ body > #root > div {
 .SearchScreenBase {
   margin: 20px 20%;
   /* background-color: aqua; */
+}
+
+.spinner-border {
+  width: 5rem;
+  height: 5rem;
 }

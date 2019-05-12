@@ -21,7 +21,8 @@ class SearchSreen extends Component {
     timeCount: 60,
     isTimerRunning: false,
     apiCallCount: 0,
-    searchDisable: false
+    searchDisable: false,
+    loading: false
   };
 
   componentWillUnmount() {
@@ -64,6 +65,7 @@ class SearchSreen extends Component {
 
   getWholePlanetList() {
     this.setState({
+      loading: true,
       scrolling: true,
       page: this.state.page + 1
     });
@@ -75,7 +77,8 @@ class SearchSreen extends Component {
           wholePlanetList: [...this.state.wholePlanetList, ...data.results],
           results: [...this.state.wholePlanetList, ...data.results],
           nextPageUrl: data.next,
-          scrolling: false
+          scrolling: false,
+          loading: false
         });
         console.log('this.state.wholePlanetList', this.state.wholePlanetList);
       }
@@ -182,37 +185,58 @@ class SearchSreen extends Component {
     const popup = this.state.showPopup ? (
       <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
     ) : null;
-    return (
-      <div className="SearchScreenBody Scroll-lock">
-        <nav className="navbar NavBarColor">
-          <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
-          <form className="form-inline">
-            <button
-              className="btn btn-outline-warning my-2 my-sm-0  btn-sm"
-              type="submit"
-              onClick={() => this.logoutClicked()}
-            >
-              Logout
-            </button>
-          </form>
-        </nav>
-
-        {popup}
-        <div className="SearchScreenBase">
-          <input
-            className="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            onChange={this.handleInputChange}
-            disabled={this.state.searchDisable}
-          />
-          <PlanetList
-            planetList={this.state.results}
-            showPlanetInfo={this.showPlanetInfo}
-          />
+    if (this.state.loading) {
+      return (
+        <div className="SearchScreenBody Scroll-lock">
+          <nav className="navbar NavBarColor">
+            <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
+            <form className="form-inline">
+              <button
+                className="btn btn-outline-warning my-2 my-sm-0  btn-lg"
+                type="submit"
+                onClick={() => this.logoutClicked()}
+              >
+                Logout
+              </button>
+            </form>
+          </nav>
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border text-warning" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="SearchScreenBody Scroll-lock">
+          <nav className="navbar NavBarColor">
+            <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
+            <form className="form-inline">
+              <button
+                className="btn btn-outline-warning my-2 my-sm-0  btn-lg"
+                type="submit"
+                onClick={() => this.logoutClicked()}
+              >
+                Logout
+              </button>
+            </form>
+          </nav>
+
+          {popup}
+          <div className="SearchScreenBase">
+            <input
+              className="form-control mr-sm-2"
+              type="search"
+              placeholder="Search"
+              onChange={this.handleInputChange}
+              disabled={this.state.searchDisable}
+            />
+            <PlanetList planetList={this.state.results} showPlanetInfo={this.showPlanetInfo} />
+          </div>
+        </div>
+      );
+    }
   }
 }
 export default SearchSreen;
