@@ -9,6 +9,9 @@ import * as Sentry from '@sentry/browser';
 Sentry.init({ dsn: 'https://eaa85ad988644e4e91c456ea51d83a00@sentry.io/1457430' });
 // Sentry.captureException(new Error('This is my fake error message'));
 
+/**
+ * Main App component.
+ */
 function App() {
   return (
     <Router history={browserHistory}>

@@ -7,8 +7,16 @@ import '../planet_info/PlanetInfo.css';
 import * as LocalStorage from '../../shared/LocalStorage';
 import { Navbar } from 'react-bootstrap';
 import '../../components/search/SearchScreen.css';
+import * as ErrorConstants from '../../utils/ErrorConstants';
+import * as Constants from '../../utils/Constant';
+import * as Sentry from '@sentry/browser';
 
+/**
+ * Search Screen component which enables to
+ * serach for specified planet.
+ */
 class SearchSreen extends Component {
+  //** State of components */
   state = {
     query: '',
     results: [],
@@ -25,25 +33,40 @@ class SearchSreen extends Component {
     loading: false
   };
 
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
+  /**
+   * Method to check for time interval
+   * and restricting the further search
+   * for specified interval of time.
+   */
   tick() {
     if (this.state.timeCount === 0 && this.state.searchDisable === true) {
       this.setState({ timeCount: 60, searchDisable: false, apiCallCount: 0 });
-      alert('You can continue your search');
+      alert(ErrorConstants.ERROR_START_SEARCH);
     }
     this.setState({ timeCount: this.state.timeCount - 1 });
   }
+
+  /**
+   * Method to start the timer.
+   */
   startTimer() {
     clearInterval(this.timer);
-    this.timer = setInterval(this.tick.bind(this), 1000);
+    this.timer = setInterval(this.tick.bind(this), Constants.MILI_SEC);
   }
+
+  /**
+   * Method to stop timer.
+   */
   stopTimer() {
     clearInterval(this.timer);
   }
 
+  /**
+   * Lifecycle hook for the component
+   * Doing the clear the interval here.
+   */
   componentWillMount() {
+    clearInterval(this.timer);
     this.scrollListner = window.addEventListener('scroll', (e) => {
       this.handelScroll(e);
       console.log('handelScroll added');
@@ -51,6 +74,9 @@ class SearchSreen extends Component {
     this.getWholePlanetList();
   }
 
+  /**
+   * Method to handle the scroll over the page.
+   */
   handelScroll = () => {
     console.log('handelScroll', this.state.nextPageUrl);
     const { scrolling } = this.state;
@@ -63,6 +89,10 @@ class SearchSreen extends Component {
     if (pageOffset > lastLiOffSet - bottomOffset) this.getWholePlanetList();
   };
 
+  /**
+   * Method to get list of whole planet
+   * from the API.
+   */
   getWholePlanetList() {
     this.setState({
       loading: true,
@@ -85,41 +115,36 @@ class SearchSreen extends Component {
     });
   }
 
-  //   getSerachPlanet = url => {
-  //     Webservice({
-  //       url: url,
-  //       successCall: data => {
-  //         this.setState({
-  //           results: data.results,
-  //           nextPageUrl: data.next
-  //         });
-  //       }
-  //     });
-  //   };
-
+  /**
+   * Method to validate the search made.
+   */
   validateForSearch() {
     const { timeCount, apiCallCount } = this.state;
     console.log(LocalStorage.getUser(), Constant.PRIME_USER);
     if (LocalStorage.getUser() === Constant.PRIME_USER) {
-      if (timeCount > 0 && apiCallCount < 5) {
+      if (timeCount > Constant.ZERO && apiCallCount < Constant.MAX_API_CALL) {
         return true;
       } else {
         this.stopTimer();
         this.setState(
           {
-            timeCount: 10,
+            timeCount: Constant.MAX_API_HIT_COUNT,
             searchDisable: true
           },
           () => this.startTimer()
         );
 
-        alert(`Your Search limit exceeded please wait for ${10} seconds.`);
+        alert(ErrorConstants.MESSAGE_LIMIT_EXCEED);
         return false;
       }
     }
     return true;
   }
 
+  /**
+   * Method of handle Input change while
+   * making search for from API.
+   */
   handleInputChange = (e) => {
     if (!this.state.isTimerRunning) {
       this.setState({ isTimerRunning: true });
@@ -157,6 +182,10 @@ class SearchSreen extends Component {
     );
   };
 
+  /**
+   * Method to show information about the
+   * planet and settiing state accordingly.
+   */
   showPlanetInfo = (info, isHide) => {
     this.setState({
       planetInfo: info,
@@ -164,6 +193,10 @@ class SearchSreen extends Component {
     });
   };
 
+  /**
+   * Method to hide planet information
+   * when required.
+   */
   hidePlanetInfo = () => {
     console.log('hidePlanetInfo');
     this.setState({
@@ -171,16 +204,37 @@ class SearchSreen extends Component {
     });
   };
 
-  componentDidCatch(error, info) {
-    console.log(error, info);
+  /**
+   * Handle error at the component level.
+   * Making use of Sentry API to sending error
+   * log to server with all details.
+   * @param {*} error erro occured
+   * @param {*} errorInfo detaild infor about the error.
+   */
+  componentDidCatch(error, errorInfo) {
+    console.log(error, errorInfo);
+    this.setState({ error });
+    Sentry.withScope((scope) => {
+      scope.setExtras(errorInfo);
+      const eventId = Sentry.captureException(error);
+      this.setState({ eventId });
+    });
   }
+
+  /**
+   * Method to handle the logout.
+   */
   logoutClicked() {
-    if (window.confirm('Are you sure you want to Logout?')) {
+    if (window.confirm(ErrorConstants.MESSAGE_CONFIRM_LOGOUT)) {
       LocalStorage.setUser('');
       // browserHistory.push("/");
     }
   }
 
+  /**
+   * Method to render the UI for
+   * Search screen.
+   */
   render() {
     const popup = this.state.showPopup ? (
       <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
@@ -239,4 +293,5 @@ class SearchSreen extends Component {
     }
   }
 }
+
 export default SearchSreen;

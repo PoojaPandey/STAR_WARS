@@ -7,9 +7,11 @@
   font-family: Arial, Helvetica, sans-serif;
   /* height: 100% !important; */
 }
+
 body > #root > div {
   height: 100vh;
 }
+
 .NavBarColor {
   background-color: rgb(56, 55, 55);
 }
@@ -18,9 +20,6 @@ body > #root > div {
   justify-content: 'center';
   align-items: 'center';
   color: rgb(146, 14, 65);
-  /* flex: 1;
-  width: '100%'; */
-  /* background-color: aqua; */
 }
 
 .SearchScreenBase {

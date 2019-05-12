@@ -22,11 +22,13 @@
   flex-direction: row;
   display: flex;
 }
+
 .Image {
   width: 85%;
   height: 80%;
   border-radius: 50%;
 }
+
 .PlanetImage {
   width: 40px;
   height: 450px;

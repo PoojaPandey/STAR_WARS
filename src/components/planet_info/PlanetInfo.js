@@ -1,13 +1,22 @@
 import React from 'react';
 import './PlanetInfo.css';
 
-const createImageURL = name => {
+/**
+ * COnstant to return image URL
+ */
+const createImageURL = (name) => {
   try {
     return require('../../assets/images/' + name + '.png');
   } catch (err) {
     return '../../assets/images/' + name + '.png';
   }
 };
+
+/**
+ * Function to render Planet Information UI.
+ * @param {*} props Function component to
+ * retrun Planet info popup.
+ */
 function PlanetInfo(props) {
   const planet = props.value;
   return (
@@ -23,11 +32,7 @@ function PlanetInfo(props) {
         </button>
         <div className="Row">
           <div className="PlanetImage">
-            <img
-              src={createImageURL(planet.name)}
-              alt={planet.name + '.png'}
-              className="Image"
-            />
+            <img src={createImageURL(planet.name)} alt={planet.name + '.png'} className="Image" />
             <h1>{planet.name}</h1>
           </div>
           <div className="PlanetDetail">
@@ -43,7 +48,5 @@ function PlanetInfo(props) {
     </div>
   );
 }
-
-// export default Warper(PlanetInfo);
 
 export default PlanetInfo;

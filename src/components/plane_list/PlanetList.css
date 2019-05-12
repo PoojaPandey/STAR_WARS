@@ -6,6 +6,7 @@
   color: black;
   border-radius: 5px;
 }
+
 .List {
   overflow: auto;
   height: auto;

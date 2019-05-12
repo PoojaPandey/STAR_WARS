@@ -1,23 +1,36 @@
 import React, { useState } from 'react';
 import '../plane_list/PlanetList.css';
 import update from 'immutability-helper';
+import * as Constant from '../../utils/Constant';
 
+/**
+ *
+ * @param {*} props Function to find percentage of
+ * population passed as props.
+ */
 function getPopulationPercent(props) {
   console.log('population', props.population);
-
   const percent = (props.population / props.max) * 100;
   console.log('percent', percent);
   return `${percent.toFixed(2)}`;
 }
 
+/**
+ *
+ * @param {*} props Function to det populations.
+ */
 function setPopulationDefault(props) {
   console.log('list', props.list);
-
-  var newData = props.list.map(el =>
-    el.population === 'unknown' ? '0' : el.population
+  var newData = props.list.map((el) =>
+    el.population === Constant.TEXT_UNKOWN ? Constant.TEXT_ZERO : el.population
   );
   return newData;
 }
+
+/**
+ *
+ * @param {*} props Function to return list of Planet.
+ */
 function PlanetList(props) {
   const { planetList, showPlanetInfo } = props;
   const populationList = setPopulationDefault({ list: planetList });
@@ -28,16 +41,10 @@ function PlanetList(props) {
   return (
     <div>
       {planetList.map((planet, index) => (
-        <div
-          className="PlanetList "
-          key={planet.name}
-          onClick={() => showPlanetInfo(planet)}
-        >
+        <div className="PlanetList " key={planet.name} onClick={() => showPlanetInfo(planet)}>
           <h4 className="TextPadding">
             {planet.name}
-            <span className="badge badge-danger float-right ">
-              {getRelativePercent(index)}
-            </span>
+            <span className="badge badge-danger float-right ">{getRelativePercent(index)}</span>
           </h4>
           <div className="progress">
             <div
@@ -50,12 +57,16 @@ function PlanetList(props) {
               aria-valuemax="100"
             />
           </div>
-          {/* </div> */}
         </div>
       ))}
     </div>
   );
 
+  /**
+   *
+   * @param {*} index Function to find relative percentage
+   * to each other.
+   */
   function getRelativePercent(index) {
     return `${getPopulationPercent({
       population: parseInt(populationList[index]),

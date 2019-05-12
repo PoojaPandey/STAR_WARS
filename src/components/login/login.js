@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router';
 import * as LocalStorage from '../../shared/LocalStorage';
 import video from '../../assets/images/Galaxy.mp4';
 import * as Sentry from '@sentry/browser';
+import * as ErrorConstants from '../../utils/ErrorConstants';
 
 /**
  * This class is for Login screen
@@ -51,10 +52,10 @@ class Login extends Component {
         this.setState({ username: null, password: null });
         browserHistory.push('/SearchScreen');
       } else {
-        alert('Wrong username or password');
+        alert(ErrorConstants.ERROR_WRONG_USER);
       }
     } else {
-      alert('Wrong username or password');
+      alert(ErrorConstants.ERROR_WRONG_USER);
     }
   };
 
@@ -70,7 +71,10 @@ class Login extends Component {
    */
   validation() {
     const { username, password } = this.state;
-    if (username.length <= 0 || password.length <= 0) {
+    if (
+      username.length <= constant.MIN_VALID_LENGTH ||
+      password.length <= constant.MIN_VALID_LENGTH
+    ) {
       return false;
     } else {
       return true;
@@ -86,7 +90,7 @@ class Login extends Component {
       const url = constant.LOGIN + username;
       Webservice({ url: url, successCall: this.successCall });
     } else {
-      alert('Invalid input');
+      alert(ErrorConstants.ERROR_INVALID_INPUT);
     }
   }
 
@@ -108,6 +112,27 @@ class Login extends Component {
   }
 
   /**
+   * Login form to read user namd and password.
+   */
+  loginForm() {
+    return (
+      <form>
+        <input type="text" id="login" className="fadeIn second" name="login" placeholder="login" />
+        <br />
+        <input
+          type="password"
+          id="password"
+          className="fadeIn third"
+          name="login"
+          placeholder="password"
+        />
+        <br />
+        <input type="submit" className="fadeIn fourth" value="Log In" />
+      </form>
+    );
+  }
+
+  /**
    * Method to render the UI.
    */
   render() {
@@ -118,25 +143,7 @@ class Login extends Component {
           src={require('../../assets/images/star_wars_logo_2.png')}
           alt="logo"
         />
-        <div id="formContent">
-          <form>
-            <input
-              type="text"
-              id="login"
-              className="fadeIn second"
-              name="login"
-              placeholder="login"
-            />
-            <input
-              type="text"
-              id="password"
-              className="fadeIn third"
-              name="login"
-              placeholder="password"
-            />
-            <input type="submit" className="fadeIn fourth" value="Log In" />
-          </form>
-        </div>
+        <div id="formContent">{this.loginForm()}</div>
       </div>
     );
   }
