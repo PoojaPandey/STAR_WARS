@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../plane_list/PlanetList.css';
-import update from 'immutability-helper';
 import * as Constant from '../../utils/Constant';
 
 /**
@@ -40,7 +39,7 @@ function PlanetList(props) {
     1
   );
   return (
-    <div>
+    <div className="container h-100">
       {planetList.map((planet, index) => (
         <div className="PlanetList " key={planet.name} onClick={() => showPlanetInfo(planet)}>
           <h4 className="TextPadding">

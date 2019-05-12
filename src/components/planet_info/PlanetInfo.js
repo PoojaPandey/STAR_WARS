@@ -20,8 +20,8 @@ const createImageURL = (name) => {
 function PlanetInfo(props) {
   const planet = props.value;
   return (
-    <div className="PlanetInfoBase">
-      <div className="InnerBase">
+    <div className="PlanetInfoBase modal-body">
+      <div className="InnerBase ">
         <u>
           <i>
             <h1>Planet Inforamtion</h1>

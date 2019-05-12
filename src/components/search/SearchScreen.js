@@ -5,11 +5,11 @@ import PlanetList from '../plane_list/PlanetList';
 import PlanetInfo from '../planet_info/PlanetInfo';
 import '../planet_info/PlanetInfo.css';
 import * as LocalStorage from '../../shared/LocalStorage';
-import { Navbar } from 'react-bootstrap';
 import '../../components/search/SearchScreen.css';
 import * as ErrorConstants from '../../utils/ErrorConstants';
 import * as Constants from '../../utils/Constant';
 import * as Sentry from '@sentry/browser';
+import video from '../../assets/images/EarthSun.mp4';
 
 /**
  * Search Screen component which enables to
@@ -245,7 +245,10 @@ class SearchSreen extends Component {
       <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
     ) : null;
     return (
-      <div className="SearchScreenBody Scroll-lock">
+      <div className="SearchScreenBody Scroll-lock overlay">
+        <video id="myVideo" autoPlay muted loop>
+          <source src={video} type="video/mp4" />
+        </video>
         <nav className="navbar NavBarColor">
           <h1 className="Welcome ">{LocalStorage.getUser()}</h1>
           <form className="form-inline">
@@ -260,7 +263,7 @@ class SearchSreen extends Component {
         </nav>
 
         {popup}
-        <div className="SearchScreenBase">
+        <div className="SearchScreenBase container">
           <input
             className="form-control mr-sm-2"
             type="search"
@@ -271,7 +274,7 @@ class SearchSreen extends Component {
           <PlanetList planetList={this.state.results} showPlanetInfo={this.showPlanetInfo} />
           <br />
           {this.state.loading ? (
-            <div className="d-flex justify-content-center ">
+            <div className="d-flex justify-content-center">
               <div className="spinner-border text-danger" role="status">
                 <span className="sr-only">Loading...</span>
               </div>

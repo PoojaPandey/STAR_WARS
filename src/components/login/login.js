@@ -4,7 +4,7 @@ import Webservice from '../../services/Service';
 import * as constant from '../../utils/Constant';
 import { browserHistory } from 'react-router';
 import * as LocalStorage from '../../shared/LocalStorage';
-import video from '../../assets/images/Galaxy.mp4';
+import video from '../../assets/images/EarthSun.mp4';
 import * as Sentry from '@sentry/browser';
 import * as ErrorConstants from '../../utils/ErrorConstants';
 
@@ -53,7 +53,7 @@ class Login extends Component {
         console.log('push');
         browserHistory.push('/SearchScreen');
       } else {
-        alert('Wrong username or password');
+        alert(ErrorConstants.ERROR_WRONG_USER);
       }
     } else {
       alert(ErrorConstants.ERROR_WRONG_USER);
@@ -137,27 +137,6 @@ class Login extends Component {
   };
 
   /**
-   * Login form to read user namd and password.
-   */
-  loginForm() {
-    return (
-      <form>
-        <input type="text" id="login" className="fadeIn second" name="login" placeholder="login" />
-        <br />
-        <input
-          type="password"
-          id="password"
-          className="fadeIn third"
-          name="login"
-          placeholder="password"
-        />
-        <br />
-        <input type="submit" className="fadeIn fourth" value="Log In" />
-      </form>
-    );
-  }
-
-  /**
    * Method to render the UI.
    */
   render() {
@@ -168,6 +147,7 @@ class Login extends Component {
           src={require('../../assets/images/star_wars_logo_2.png')}
           alt="logo"
         />
+
         <div id="formContent">
           <input
             type="text"
