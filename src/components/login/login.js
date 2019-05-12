@@ -77,7 +77,7 @@ class Login extends Component {
   }
 
   /**
-   * Logging error to console.
+   * Logging error to console
    */
   errorCall = error => {
     console.log(error);
