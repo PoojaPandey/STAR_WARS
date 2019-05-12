@@ -32,6 +32,7 @@ function setPopulationDefault(props) {
  * @param {*} props Function to return list of Planet.
  */
 function PlanetList(props) {
+  console.log('PlanetList');
   const { planetList, showPlanetInfo } = props;
   const populationList = setPopulationDefault({ list: planetList });
   const max = populationList.reduce(

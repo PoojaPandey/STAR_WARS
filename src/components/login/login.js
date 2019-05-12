@@ -35,17 +35,26 @@ class Login extends Component {
   /**
    * Auth Setting for setting user props.
    */
-  authSetting = (props) => LocalStorage.setUser(props);
+  authSetting = props => LocalStorage.setUser(props);
 
   /**
    * To check succesfull response.
    */
-  successCall = (response) => {
+  successCall = response => {
     console.log('response', response);
     const result = response['results'];
     const { password } = this.state;
     if (result[0] !== null) {
-      this.checkPassword(password, result);
+      if (password === result[0].birth_year) {
+        console.log('password ===', password);
+        const userData = result[0];
+        this.authSetting(userData.name);
+        this.setState({ username: null, password: null });
+        console.log('push');
+        browserHistory.push('/SearchScreen');
+      } else {
+        alert('Wrong username or password');
+      }
     } else {
       alert(ErrorConstants.ERROR_WRONG_USER);
     }
@@ -72,7 +81,7 @@ class Login extends Component {
   /**
    * Logging error to console.
    */
-  errorCall = (error) => {
+  errorCall = error => {
     console.log(error);
   };
 
@@ -94,7 +103,7 @@ class Login extends Component {
   /**
    * Handlle button click even of Login button.
    */
-  handleClick(event) {
+  onLoginClick() {
     const { username } = this.state;
     if (this.validation()) {
       const url = constant.LOGIN + username;
@@ -114,12 +123,18 @@ class Login extends Component {
   componentDidCatch(error, errorInfo) {
     console.log(error, errorInfo);
     this.setState({ error });
-    Sentry.withScope((scope) => {
+    Sentry.withScope(scope => {
       scope.setExtras(errorInfo);
       const eventId = Sentry.captureException(error);
       this.setState({ eventId });
     });
   }
+
+  handleChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
+  };
 
   /**
    * Login form to read user namd and password.
@@ -153,7 +168,32 @@ class Login extends Component {
           src={require('../../assets/images/star_wars_logo_2.png')}
           alt="logo"
         />
-        <div id="formContent">{this.loginForm()}</div>
+        <div id="formContent">
+          <input
+            type="text"
+            id="username"
+            className="fadeIn second"
+            name="username"
+            placeholder="login"
+            value={this.state.username}
+            onChange={this.handleChange}
+          />
+          <input
+            type="text"
+            id="password"
+            className="fadeIn third"
+            name="password"
+            placeholder="password"
+            value={this.state.password}
+            onChange={this.handleChange}
+          />
+          <input
+            type="submit"
+            className="fadeIn fourth LoinButton"
+            onClick={this.onLoginClick.bind(this)}
+            value="Log In"
+          />
+        </div>
       </div>
     );
   }
