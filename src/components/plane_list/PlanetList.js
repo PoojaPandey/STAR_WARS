@@ -35,13 +35,13 @@ function PlanetList(props) {
         >
           <h4 className="TextPadding">
             {planet.name}
-            <span className="badge badge-warning float-right ">
+            <span className="badge badge-danger float-right ">
               {getRelativePercent(index)}
             </span>
           </h4>
           <div className="progress">
             <div
-              className="progress-bar bg-warning"
+              className="progress-bar progress-bar-striped bg-danger"
               role="progressbar"
               style={{
                 width: getRelativePercent(index)

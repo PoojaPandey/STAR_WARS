@@ -4,6 +4,7 @@
   margin-top: 15px;
   width: 100%;
   color: black;
+  border-radius: 5px;
 }
 .List {
   overflow: auto;
