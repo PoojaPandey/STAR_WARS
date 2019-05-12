@@ -102,7 +102,7 @@ class SearchSreen extends Component {
     const url = Constant.BASE_URL + `planets/?page=${this.state.page}`;
     Webservice({
       url: url,
-      successCall: data => {
+      successCall: (data) => {
         this.setState({
           wholePlanetList: [...this.state.wholePlanetList, ...data.results],
           results: [...this.state.wholePlanetList, ...data.results],
@@ -166,7 +166,7 @@ class SearchSreen extends Component {
             console.log('url', url);
             Webservice({
               url: url,
-              successCall: data => {
+              successCall: (data) => {
                 this.setState({
                   results: data.results,
                   nextPageUrl: data.next,
@@ -237,103 +237,13 @@ class SearchSreen extends Component {
   }
 
   /**
-   * Method to display the search result with
-   * planet details over the popup.
-   * @param {*} popup
-   */
-  diaplaySearchResult(popup) {
-    return (
-      <div className="SearchScreenBody Scroll-lock">
-        <nav className="navbar NavBarColor">
-          <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
-          <form className="form-inline">
-            <button
-              className="btn btn-outline-warning my-2 my-sm-0  btn-lg"
-              type="submit"
-              onClick={() => this.logoutClicked()}
-            >
-              Logout
-            </button>
-          </form>
-        </nav>
-
-        {popup}
-        <div className="SearchScreenBase">
-          <input
-            className="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            onChange={this.handleInputChange}
-            disabled={this.state.searchDisable}
-          />
-          <PlanetList planetList={this.state.results} showPlanetInfo={this.showPlanetInfo} />
-        </div>
-      </div>
-    );
-  }
-
-  /**
-   * Method to display loading screen while
-   * fetching details from API.
-   */
-  displayLoading() {
-    return (
-      <div className="SearchScreenBody Scroll-lock">
-        <nav className="navbar NavBarColor">
-          <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
-          <form className="form-inline">
-            <button
-              className="btn btn-outline-warning my-2 my-sm-0  btn-lg"
-              type="submit"
-              onClick={() => this.logoutClicked()}
-            >
-              Logout
-            </button>
-          </form>
-        </nav>
-        <div class="d-flex justify-content-center">
-          <div class="spinner-border text-warning" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  /**
    * Method to render the UI for
    * Search screen.
    */
   render() {
     const popup = this.state.showPopup ? (
-      <PlanetInfo
-        value={this.state.planetInfo}
-        hidePlanetInfo={this.hidePlanetInfo}
-      />
+      <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
     ) : null;
-    // if (this.state.loading) {
-    //   return (
-    //     <div className="SearchScreenBody Scroll-lock">
-    //       <nav className="navbar NavBarColor">
-    //         <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
-    //         <form className="form-inline">
-    //           <button
-    //             className="btn btn-outline-danger my-2 my-sm-0  btn-sm"
-    //             type="submit"
-    //             onClick={() => this.logoutClicked()}
-    //           >
-    //             Logout
-    //           </button>
-    //         </form>
-    //       </nav>
-    //       <div className="d-flex justify-content-center">
-    //         <div className="spinner-border text-danger" role="status">
-    //           <span className="sr-only">Loading...</span>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   );
-    // } else {
     return (
       <div className="SearchScreenBody Scroll-lock">
         <nav className="navbar NavBarColor">
@@ -358,10 +268,7 @@ class SearchSreen extends Component {
             onChange={this.handleInputChange}
             disabled={this.state.searchDisable}
           />
-          <PlanetList
-            planetList={this.state.results}
-            showPlanetInfo={this.showPlanetInfo}
-          />
+          <PlanetList planetList={this.state.results} showPlanetInfo={this.showPlanetInfo} />
           <br />
           {this.state.loading ? (
             <div className="d-flex justify-content-center ">

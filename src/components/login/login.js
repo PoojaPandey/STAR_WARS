@@ -35,12 +35,12 @@ class Login extends Component {
   /**
    * Auth Setting for setting user props.
    */
-  authSetting = props => LocalStorage.setUser(props);
+  authSetting = (props) => LocalStorage.setUser(props);
 
   /**
    * To check succesfull response.
    */
-  successCall = response => {
+  successCall = (response) => {
     console.log('response', response);
     const result = response['results'];
     const { password } = this.state;
@@ -81,7 +81,7 @@ class Login extends Component {
   /**
    * Logging error to console.
    */
-  errorCall = error => {
+  errorCall = (error) => {
     console.log(error);
   };
 
@@ -123,14 +123,14 @@ class Login extends Component {
   componentDidCatch(error, errorInfo) {
     console.log(error, errorInfo);
     this.setState({ error });
-    Sentry.withScope(scope => {
+    Sentry.withScope((scope) => {
       scope.setExtras(errorInfo);
       const eventId = Sentry.captureException(error);
       this.setState({ eventId });
     });
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
       [event.target.id]: event.target.value
     });
@@ -174,16 +174,16 @@ class Login extends Component {
             id="username"
             className="fadeIn second"
             name="username"
-            placeholder="login"
+            placeholder="Enter Username"
             value={this.state.username}
             onChange={this.handleChange}
           />
           <input
-            type="text"
+            type="password"
             id="password"
             className="fadeIn third"
             name="password"
-            placeholder="password"
+            placeholder="Enter Password"
             value={this.state.password}
             onChange={this.handleChange}
           />
