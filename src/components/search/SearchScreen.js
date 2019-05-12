@@ -185,10 +185,10 @@ class SearchSreen extends Component {
     return (
       <div className="SearchScreenBody Scroll-lock">
         <nav className="navbar NavBarColor">
-          <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
+          <h1 className="Welcome danger ">Wecome {LocalStorage.getUser()}</h1>
           <form className="form-inline">
             <button
-              className="btn btn-outline-warning my-2 my-sm-0  btn-sm"
+              className="btn btn-outline-danger my-2 my-sm-0  btn-sm"
               type="submit"
               onClick={() => this.logoutClicked()}
             >
@@ -202,7 +202,7 @@ class SearchSreen extends Component {
           <input
             className="form-control mr-sm-2"
             type="search"
-            placeholder="Search"
+            placeholder="Search planet"
             onChange={this.handleInputChange}
             disabled={this.state.searchDisable}
           />

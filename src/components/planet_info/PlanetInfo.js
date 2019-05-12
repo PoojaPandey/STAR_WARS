@@ -21,7 +21,6 @@ function PlanetInfo(props) {
         <button className="Button" onClick={props.hidePlanetInfo}>
           X
         </button>
-
         <div className="Row">
           <div className="PlanetImage">
             <img
@@ -38,10 +37,6 @@ function PlanetInfo(props) {
                 {item}:{planet[item]}
               </h6>
             ))}
-            {/* <h1 style={{ color: 'white' }}>{planet.name}</h1>
-            <h2>{planet.rotation_period}</h2>
-            <h1>{planet.orbital_period}</h1>
-            <h1>{planet.diameter}</h1> */}
           </div>
         </div>
       </div>
