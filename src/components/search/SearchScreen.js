@@ -54,10 +54,10 @@ class SearchSreen extends Component {
     console.log('handelScroll', this.state.nextPageUrl);
     const { scrolling } = this.state;
     if (scrolling) return;
-    const lastLi = document.querySelector('ul > li:last-child');
+    const lastLi = document.querySelector('div > div:last-child');
     const lastLiOffSet = lastLi.offsetTop + lastLi.clientHeight;
     const pageOffset = window.pageYOffset + window.innerHeight;
-    var bottomOffset = 30;
+    var bottomOffset = 0;
     if (this.state.nextPageUrl === null) return;
     if (pageOffset > lastLiOffSet - bottomOffset) this.getWholePlanetList();
   };
@@ -137,14 +137,16 @@ class SearchSreen extends Component {
               successCall: (data) => {
                 this.setState({
                   results: data.results,
-                  nextPageUrl: data.next
+                  nextPageUrl: data.next,
+                  page: 1
                 });
                 console.log('handleInputChange');
               }
             });
           } else {
             this.setState({
-              results: this.state.wholePlanetList
+              results: this.state.wholePlanetList,
+              page: 1
             });
           }
         }
@@ -169,31 +171,45 @@ class SearchSreen extends Component {
   componentDidCatch(error, info) {
     console.log(error, info);
   }
+  logoutClicked() {
+    if (window.confirm('Are you sure you want to Logout?')) {
+      LocalStorage.setUser('');
+      // browserHistory.push("/");
+    }
+  }
 
   render() {
     const popup = this.state.showPopup ? (
       <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
     ) : null;
     return (
-      <div>
-        <nav className="navbar navbar-light bg-dark justify-content-between ">
-          <h2 className="text-center">Welcome {LocalStorage.getUser()}</h2>
-          <form className="form-inline ">
-            <input
-              className="form-control mr-sm-2"
-              placeholder="Search for..."
-              onChange={this.handleInputChange}
-              disabled={this.state.searchDisable}
-            />
-            <button className="btn btn-outline-danger my-2 my-sm-0 glyphicon">
-              <span className="glyphicon glyphicon-user" />
+      <div className="SearchScreenBody Scroll-lock">
+        <nav className="navbar NavBarColor">
+          <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
+          <form className="form-inline">
+            <button
+              className="btn btn-outline-warning my-2 my-sm-0  btn-sm"
+              type="submit"
+              onClick={() => this.logoutClicked()}
+            >
               Logout
             </button>
           </form>
         </nav>
-        <div className="container">
-          {popup}
-          <PlanetList planetList={this.state.results} showPlanetInfo={this.showPlanetInfo} />
+
+        {popup}
+        <div className="SearchScreenBase">
+          <input
+            className="form-control mr-sm-2"
+            type="search"
+            placeholder="Search"
+            onChange={this.handleInputChange}
+            disabled={this.state.searchDisable}
+          />
+          <PlanetList
+            planetList={this.state.results}
+            showPlanetInfo={this.showPlanetInfo}
+          />
         </div>
       </div>
     );

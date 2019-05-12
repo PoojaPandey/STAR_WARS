@@ -2,7 +2,10 @@
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(12, 11, 9, 0.8);
+  text-align: center;
+  color: rgb(7, 5, 0);
+  top: 0px;
 }
 
 .InnerBase {
@@ -12,7 +15,7 @@
   top: 15%;
   bottom: 15%;
   border-radius: 20px;
-  background-color: red;
+  background-color: rgb(224, 171, 71);
 }
 
 .Row {
@@ -20,9 +23,9 @@
   display: flex;
 }
 .Image {
-  width: 90%;
-  height: 90%;
-  border-radius: 20px;
+  width: 85%;
+  height: 80%;
+  border-radius: 50%;
 }
 .PlanetImage {
   width: 40px;
@@ -34,16 +37,20 @@
 }
 
 .PlanetDetail {
+  padding: 3%;
   left: 10px;
   flex: 1;
-  background-color: aqua;
+  width: 40%;
+  word-wrap: break-word;
+  text-align: left;
+  font-size: 18;
 }
 
 .Button {
   position: absolute;
   padding: 2px 5px;
-  right: -8px;
-  top: -8px;
+  right: -2px;
+  top: -2px;
   width: 20px;
   height: 20px;
   font-size: 10px;
