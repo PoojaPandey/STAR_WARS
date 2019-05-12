@@ -182,6 +182,7 @@ class SearchSreen extends Component {
   }
 
   render() {
+    
     const popup = this.state.showPopup ? (
       <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
     ) : null;
