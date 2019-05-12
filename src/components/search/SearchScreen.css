@@ -11,13 +11,13 @@ body > #root > div {
   height: 100vh;
 }
 .NavBarColor {
-  background-color: rgb(56, 55, 55);
+  background-color: rgb(184, 183, 183);
 }
 
 .Welcome {
   justify-content: 'center';
   align-items: 'center';
-  color: rgb(146, 14, 65);
+  color: rgb(221, 6, 88);
   /* flex: 1;
   width: '100%'; */
   /* background-color: aqua; */

@@ -44,7 +44,7 @@ class SearchSreen extends Component {
   }
 
   componentWillMount() {
-    this.scrollListner = window.addEventListener('scroll', (e) => {
+    this.scrollListner = window.addEventListener('scroll', e => {
       this.handelScroll(e);
       console.log('handelScroll added');
     });
@@ -65,14 +65,14 @@ class SearchSreen extends Component {
 
   getWholePlanetList() {
     this.setState({
-      loading: true,
+      loading: this.state.page === 1 ? true : false,
       scrolling: true,
       page: this.state.page + 1
     });
     const url = Constant.BASE_URL + `planets/?page=${this.state.page}`;
     Webservice({
       url: url,
-      successCall: (data) => {
+      successCall: data => {
         this.setState({
           wholePlanetList: [...this.state.wholePlanetList, ...data.results],
           results: [...this.state.wholePlanetList, ...data.results],
@@ -120,7 +120,8 @@ class SearchSreen extends Component {
     return true;
   }
 
-  handleInputChange = (e) => {
+  handleInputChange = e => {
+    console.log('handleInputChange');
     if (!this.state.isTimerRunning) {
       this.setState({ isTimerRunning: true });
       this.startTimer();
@@ -133,15 +134,20 @@ class SearchSreen extends Component {
       },
       () => {
         if (this.validateForSearch()) {
+          this.setState({
+            loading: true
+          });
           if (this.state.query) {
             const url = Constant.PLANET + this.state.query;
+            console.log('url', url);
             Webservice({
               url: url,
-              successCall: (data) => {
+              successCall: data => {
                 this.setState({
                   results: data.results,
                   nextPageUrl: data.next,
-                  page: 1
+                  page: 1,
+                  loading: false
                 });
                 console.log('handleInputChange');
               }
@@ -182,62 +188,75 @@ class SearchSreen extends Component {
   }
 
   render() {
-    
     const popup = this.state.showPopup ? (
-      <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
+      <PlanetInfo
+        value={this.state.planetInfo}
+        hidePlanetInfo={this.hidePlanetInfo}
+      />
     ) : null;
-    if (this.state.loading) {
-      return (
-        <div className="SearchScreenBody Scroll-lock">
-          <nav className="navbar NavBarColor">
-            <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
-            <form className="form-inline">
-              <button
-                className="btn btn-outline-warning my-2 my-sm-0  btn-lg"
-                type="submit"
-                onClick={() => this.logoutClicked()}
-              >
-                Logout
-              </button>
-            </form>
-          </nav>
-          <div class="d-flex justify-content-center">
-            <div class="spinner-border text-warning" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="SearchScreenBody Scroll-lock">
-          <nav className="navbar NavBarColor">
-            <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
-            <form className="form-inline">
-              <button
-                className="btn btn-outline-warning my-2 my-sm-0  btn-lg"
-                type="submit"
-                onClick={() => this.logoutClicked()}
-              >
-                Logout
-              </button>
-            </form>
-          </nav>
+    // if (this.state.loading) {
+    //   return (
+    //     <div className="SearchScreenBody Scroll-lock">
+    //       <nav className="navbar NavBarColor">
+    //         <h1 className="Welcome ">Wecome {LocalStorage.getUser()}</h1>
+    //         <form className="form-inline">
+    //           <button
+    //             className="btn btn-outline-danger my-2 my-sm-0  btn-sm"
+    //             type="submit"
+    //             onClick={() => this.logoutClicked()}
+    //           >
+    //             Logout
+    //           </button>
+    //         </form>
+    //       </nav>
+    //       <div className="d-flex justify-content-center">
+    //         <div className="spinner-border text-danger" role="status">
+    //           <span className="sr-only">Loading...</span>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   );
+    // } else {
+    return (
+      <div className="SearchScreenBody Scroll-lock">
+        <nav className="navbar NavBarColor">
+          <h1 className="Welcome ">{LocalStorage.getUser()}</h1>
+          <form className="form-inline">
+            <button
+              className="btn btn-outline-danger my-2 my-sm-0  btn-sm"
+              type="submit"
+              onClick={() => this.logoutClicked()}
+            >
+              Logout
+            </button>
+          </form>
+        </nav>
 
-          {popup}
-          <div className="SearchScreenBase">
-            <input
-              className="form-control mr-sm-2"
-              type="search"
-              placeholder="Search"
-              onChange={this.handleInputChange}
-              disabled={this.state.searchDisable}
-            />
-            <PlanetList planetList={this.state.results} showPlanetInfo={this.showPlanetInfo} />
-          </div>
+        {popup}
+        <div className="SearchScreenBase">
+          <input
+            className="form-control mr-sm-2"
+            type="search"
+            placeholder="Search"
+            onChange={this.handleInputChange}
+            disabled={this.state.searchDisable}
+          />
+          <PlanetList
+            planetList={this.state.results}
+            showPlanetInfo={this.showPlanetInfo}
+          />
+          <br />
+          {this.state.loading ? (
+            <div className="d-flex justify-content-center ">
+              <div className="spinner-border text-danger" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+          ) : null}
         </div>
-      );
-    }
+      </div>
+    );
+    // }
   }
 }
 export default SearchSreen;
