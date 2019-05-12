@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Login.css';
 import Webservice from '../../services/Service';
-import * as constant from '../../utils/Constant';
+import * as Constant from '../../utils/Constant';
 import { browserHistory } from 'react-router';
 import * as LocalStorage from '../../shared/LocalStorage';
 import video from '../../assets/images/Galaxy.mp4';
@@ -35,29 +35,27 @@ class Login extends Component {
   /**
    * Auth Setting for setting user props.
    */
-  authSetting = (props) => LocalStorage.setUser(props);
+  authSetting = props => LocalStorage.setUser(props);
 
   /**
    * To check succesfull response.
    */
-  successCall = (response) => {
+  successCall = response => {
     console.log('response', response);
     const result = response['results'];
     const { password } = this.state;
-    if (result[0] !== null) {
+    if (result.length !== 0) {
       if (password === result[0].birth_year) {
-        console.log('password ===', password);
         const userData = result[0];
         this.authSetting(userData.name);
-        this.setState({ username: null, password: null });
-        console.log('push');
         browserHistory.push('/SearchScreen');
       } else {
-        alert('Wrong username or password');
+        alert(ErrorConstants.ERROR_WRONG_USER);
       }
     } else {
       alert(ErrorConstants.ERROR_WRONG_USER);
     }
+    this.setState({ username: '', password: '' });
   };
 
   /**
@@ -81,7 +79,7 @@ class Login extends Component {
   /**
    * Logging error to console.
    */
-  errorCall = (error) => {
+  errorCall = error => {
     console.log(error);
   };
 
@@ -91,8 +89,8 @@ class Login extends Component {
   validation() {
     const { username, password } = this.state;
     if (
-      username.length <= constant.MIN_VALID_LENGTH ||
-      password.length <= constant.MIN_VALID_LENGTH
+      username.length <= Constant.MIN_VALID_LENGTH ||
+      password.length <= Constant.MIN_VALID_LENGTH
     ) {
       return false;
     } else {
@@ -106,7 +104,7 @@ class Login extends Component {
   onLoginClick() {
     const { username } = this.state;
     if (this.validation()) {
-      const url = constant.LOGIN + username;
+      const url = Constant.LOGIN + username;
       Webservice({ url: url, successCall: this.successCall });
     } else {
       alert(ErrorConstants.ERROR_INVALID_INPUT);
@@ -123,14 +121,14 @@ class Login extends Component {
   componentDidCatch(error, errorInfo) {
     console.log(error, errorInfo);
     this.setState({ error });
-    Sentry.withScope((scope) => {
+    Sentry.withScope(scope => {
       scope.setExtras(errorInfo);
       const eventId = Sentry.captureException(error);
       this.setState({ eventId });
     });
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     this.setState({
       [event.target.id]: event.target.value
     });
@@ -142,7 +140,13 @@ class Login extends Component {
   loginForm() {
     return (
       <form>
-        <input type="text" id="login" className="fadeIn second" name="login" placeholder="login" />
+        <input
+          type="text"
+          id="login"
+          className="fadeIn second"
+          name="login"
+          placeholder="login"
+        />
         <br />
         <input
           type="password"
@@ -161,6 +165,9 @@ class Login extends Component {
    * Method to render the UI.
    */
   render() {
+    if (LocalStorage.getUser()) {
+      browserHistory.push('/SearchScreen');
+    }
     return (
       <div className="LoginBody wrapper">
         <img
@@ -189,7 +196,7 @@ class Login extends Component {
           />
           <input
             type="submit"
-            className="fadeIn fourth LoinButton"
+            className="fadeIn fourth"
             onClick={this.onLoginClick.bind(this)}
             value="Log In"
           />

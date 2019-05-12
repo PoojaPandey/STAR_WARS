@@ -17,6 +17,7 @@ function App() {
   return (
     <Router history={browserHistory}>
       <Route path="/" component={Login} />
+      <Route path="/Login" component={Login} />
       <Route path="/SearchScreen" component={SearchScreen} />
     </Router>
   );

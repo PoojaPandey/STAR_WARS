@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Constant from '../../utils/Constant';
+import { browserHistory, Redirect } from 'react-router';
 import Webservice from '../../services/Service';
 import PlanetList from '../plane_list/PlanetList';
 import PlanetInfo from '../planet_info/PlanetInfo';
@@ -8,7 +8,7 @@ import * as LocalStorage from '../../shared/LocalStorage';
 import { Navbar } from 'react-bootstrap';
 import '../../components/search/SearchScreen.css';
 import * as ErrorConstants from '../../utils/ErrorConstants';
-import * as Constants from '../../utils/Constant';
+import * as Constant from '../../utils/Constant';
 import * as Sentry from '@sentry/browser';
 
 /**
@@ -51,7 +51,7 @@ class SearchSreen extends Component {
    */
   startTimer() {
     clearInterval(this.timer);
-    this.timer = setInterval(this.tick.bind(this), Constants.MILI_SEC);
+    this.timer = setInterval(this.tick.bind(this), Constant.MILI_SEC);
   }
 
   /**
@@ -67,7 +67,7 @@ class SearchSreen extends Component {
    */
   componentWillMount() {
     clearInterval(this.timer);
-    this.scrollListner = window.addEventListener('scroll', (e) => {
+    this.scrollListner = window.addEventListener('scroll', e => {
       this.handelScroll(e);
       console.log('handelScroll added');
     });
@@ -102,7 +102,7 @@ class SearchSreen extends Component {
     const url = Constant.BASE_URL + `planets/?page=${this.state.page}`;
     Webservice({
       url: url,
-      successCall: (data) => {
+      successCall: data => {
         this.setState({
           wholePlanetList: [...this.state.wholePlanetList, ...data.results],
           results: [...this.state.wholePlanetList, ...data.results],
@@ -121,7 +121,7 @@ class SearchSreen extends Component {
   validateForSearch() {
     const { timeCount, apiCallCount } = this.state;
     console.log(LocalStorage.getUser(), Constant.PRIME_USER);
-    if (LocalStorage.getUser() === Constant.PRIME_USER) {
+    if (LocalStorage.getUser() !== Constant.PRIME_USER) {
       if (timeCount > Constant.ZERO && apiCallCount < Constant.MAX_API_CALL) {
         return true;
       } else {
@@ -145,7 +145,7 @@ class SearchSreen extends Component {
    * Method of handle Input change while
    * making search for from API.
    */
-  handleInputChange = (e) => {
+  handleInputChange = e => {
     if (!this.state.isTimerRunning) {
       this.setState({ isTimerRunning: true });
       this.startTimer();
@@ -166,7 +166,7 @@ class SearchSreen extends Component {
             console.log('url', url);
             Webservice({
               url: url,
-              successCall: (data) => {
+              successCall: data => {
                 this.setState({
                   results: data.results,
                   nextPageUrl: data.next,
@@ -219,7 +219,7 @@ class SearchSreen extends Component {
   componentDidCatch(error, errorInfo) {
     console.log(error, errorInfo);
     this.setState({ error });
-    Sentry.withScope((scope) => {
+    Sentry.withScope(scope => {
       scope.setExtras(errorInfo);
       const eventId = Sentry.captureException(error);
       this.setState({ eventId });
@@ -231,8 +231,8 @@ class SearchSreen extends Component {
    */
   logoutClicked() {
     if (window.confirm(ErrorConstants.MESSAGE_CONFIRM_LOGOUT)) {
-      LocalStorage.setUser('');
-      // browserHistory.push("/");
+      LocalStorage.removeUser();
+      browserHistory.push('/Login');
     }
   }
 
@@ -241,46 +241,68 @@ class SearchSreen extends Component {
    * Search screen.
    */
   render() {
+    if (!LocalStorage.getUser()) {
+      browserHistory.push('/Login');
+    }
     const popup = this.state.showPopup ? (
-      <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
+      <PlanetInfo
+        value={this.state.planetInfo}
+        hidePlanetInfo={this.hidePlanetInfo}
+      />
     ) : null;
     return (
-      <div className="SearchScreenBody Scroll-lock">
-        <nav className="navbar NavBarColor">
-          <h1 className="Welcome ">{LocalStorage.getUser()}</h1>
-          <form className="form-inline">
-            <button
-              className="btn btn-outline-danger my-2 my-sm-0  btn-sm"
-              type="submit"
-              onClick={() => this.logoutClicked()}
-            >
-              Logout
-            </button>
-          </form>
-        </nav>
-
+      <div className="SearchScreenBody">
+        {this.navigationBar()}
         {popup}
-        <div className="SearchScreenBase">
-          <input
-            className="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            onChange={this.handleInputChange}
-            disabled={this.state.searchDisable}
-          />
-          <PlanetList planetList={this.state.results} showPlanetInfo={this.showPlanetInfo} />
-          <br />
-          {this.state.loading ? (
-            <div className="d-flex justify-content-center ">
-              <div className="spinner-border text-danger" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>
-          ) : null}
-        </div>
+        {this.planetList()}
       </div>
     );
-    // }
+  }
+
+  /**
+   * Method to add search and planet list
+   */
+  planetList() {
+    return (
+      <div className="SearchScreenBase ">
+        <input
+          className="form-control mr-sm-2"
+          type="search"
+          placeholder="Search"
+          onChange={this.handleInputChange}
+          disabled={this.state.searchDisable}
+        />
+        <PlanetList
+          planetList={this.state.results}
+          showPlanetInfo={this.showPlanetInfo}
+        />
+        <br />
+        {this.state.loading ? (
+          <div className="d-flex justify-content-center ">
+            <div className="spinner-border text-danger" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+  /**
+   * Method to add Navigation bar
+   */
+  navigationBar() {
+    return (
+      <nav className="navbar NavBarColor">
+        <h3 className="Welcome ">{LocalStorage.getUser()}</h3>
+        <button
+          className="btn btn-outline-danger my-2 my-sm-0  btn-sm"
+          type="submit"
+          onClick={() => this.logoutClicked()}
+        >
+          Logout
+        </button>
+      </nav>
+    );
   }
 }
 
