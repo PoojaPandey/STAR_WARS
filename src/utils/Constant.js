@@ -11,3 +11,5 @@ export const MILI_SEC = 1000;
 export const ZERO = 0;
 export const MAX_API_CALL = 5;
 export const MAX_API_HIT_COUNT = 10;
+export const CONST_HUNDRED = 100;
+export const DECIMAL_PLACES = 2;

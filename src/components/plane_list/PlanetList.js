@@ -10,9 +10,9 @@ import * as Constant from '../../utils/Constant';
  */
 function getPopulationPercent(props) {
   console.log('population', props.population);
-  const percent = (props.population / props.max) * 100;
+  const percent = (props.population / props.max) * Constant.CONST_HUNDRED;
   console.log('percent', percent);
-  return `${percent.toFixed(2)}`;
+  return `${percent.toFixed(Constant.DECIMAL_PLACES)}`;
 }
 
 /**

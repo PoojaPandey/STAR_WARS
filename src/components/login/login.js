@@ -45,19 +45,29 @@ class Login extends Component {
     const result = response['results'];
     const { password } = this.state;
     if (result[0] !== null) {
-      if (password === result[0].birth_year) {
-        console.log('password ===', password);
-        const userData = result[0];
-        this.authSetting(userData.name);
-        this.setState({ username: null, password: null });
-        browserHistory.push('/SearchScreen');
-      } else {
-        alert(ErrorConstants.ERROR_WRONG_USER);
-      }
+      this.checkPassword(password, result);
     } else {
       alert(ErrorConstants.ERROR_WRONG_USER);
     }
   };
+
+  /**
+   * Method to check the password and
+   * validate the same.
+   * @param {*} password
+   * @param {*} result
+   */
+  checkPassword(password, result) {
+    if (password === result[0].birth_year) {
+      console.log('password ===', password);
+      const userData = result[0];
+      this.authSetting(userData.name);
+      this.setState({ username: null, password: null });
+      browserHistory.push('/SearchScreen');
+    } else {
+      alert(ErrorConstants.ERROR_WRONG_USER);
+    }
+  }
 
   /**
    * Logging error to console.
