@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Constant from '../../utils/Constant';
+import { browserHistory, Redirect } from 'react-router';
 import Webservice from '../../services/Service';
 import PlanetList from '../plane_list/PlanetList';
 import PlanetInfo from '../planet_info/PlanetInfo';
@@ -7,7 +7,7 @@ import '../planet_info/PlanetInfo.css';
 import * as LocalStorage from '../../shared/LocalStorage';
 import '../../components/search/SearchScreen.css';
 import * as ErrorConstants from '../../utils/ErrorConstants';
-import * as Constants from '../../utils/Constant';
+import * as Constant from '../../utils/Constant';
 import * as Sentry from '@sentry/browser';
 import video from '../../assets/images/EarthSun.mp4';
 
@@ -51,7 +51,7 @@ class SearchSreen extends Component {
    */
   startTimer() {
     clearInterval(this.timer);
-    this.timer = setInterval(this.tick.bind(this), Constants.MILI_SEC);
+    this.timer = setInterval(this.tick.bind(this), Constant.MILI_SEC);
   }
 
   /**
@@ -121,7 +121,7 @@ class SearchSreen extends Component {
   validateForSearch() {
     const { timeCount, apiCallCount } = this.state;
     console.log(LocalStorage.getUser(), Constant.PRIME_USER);
-    if (LocalStorage.getUser() === Constant.PRIME_USER) {
+    if (LocalStorage.getUser() !== Constant.PRIME_USER) {
       if (timeCount > Constant.ZERO && apiCallCount < Constant.MAX_API_CALL) {
         return true;
       } else {
@@ -231,8 +231,8 @@ class SearchSreen extends Component {
    */
   logoutClicked() {
     if (window.confirm(ErrorConstants.MESSAGE_CONFIRM_LOGOUT)) {
-      LocalStorage.setUser('');
-      // browserHistory.push("/");
+      LocalStorage.removeUser();
+      browserHistory.push('/Login');
     }
   }
 
@@ -241,6 +241,9 @@ class SearchSreen extends Component {
    * Search screen.
    */
   render() {
+    if (!LocalStorage.getUser()) {
+      browserHistory.push('/Login');
+    }
     const popup = this.state.showPopup ? (
       <PlanetInfo value={this.state.planetInfo} hidePlanetInfo={this.hidePlanetInfo} />
     ) : null;
@@ -283,7 +286,6 @@ class SearchSreen extends Component {
         </div>
       </div>
     );
-    // }
   }
 }
 

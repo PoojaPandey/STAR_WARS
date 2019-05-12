@@ -5,7 +5,7 @@
   /* overflow: scroll; */
   background-color: black;
   font-family: Arial, Helvetica, sans-serif;
-
+  color: #8b0606;
   /* height: 100% !important; */
 }
 
@@ -21,7 +21,7 @@ body > #root > div {
 .Welcome {
   justify-content: 'center';
   align-items: 'center';
-  color: rgb(221, 6, 88);
+  color: rgb(201, 4, 79);
   /* flex: 1;
   width: '100%'; */
   /* background-color: aqua; */

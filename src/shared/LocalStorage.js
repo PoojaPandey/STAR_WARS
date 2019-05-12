@@ -15,3 +15,11 @@ export function getUser() {
 export function setUser(props) {
   localStorage.setItem(constant.USERINFO, props);
 }
+
+/**
+ * Function to Remove user details.
+ * @param {*} props
+ */
+export function removeUser() {
+  localStorage.removeItem(constant.USERINFO);
+}

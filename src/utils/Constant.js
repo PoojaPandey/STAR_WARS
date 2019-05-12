@@ -13,3 +13,5 @@ export const MAX_API_CALL = 5;
 export const MAX_API_HIT_COUNT = 10;
 export const CONST_HUNDRED = 100;
 export const DECIMAL_PLACES = 2;
+export const ROUTE_SEARCH_SCREEN = '/SearchScreen';
+export const ROUTE_LOGIN = "/Login"
