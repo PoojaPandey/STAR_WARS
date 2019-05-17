@@ -16,24 +16,27 @@
   top: 15%;
   bottom: 15%;
   border-radius: 20px;
-  background-color: rgba(255, 0, 85, 0.9);
+  background-color: rgba(238, 12, 125, 0.959);
   z-index: 4;
+  font-style: italic;
 }
 
 .Row {
   flex-direction: row;
   display: flex;
+  background-color: aliceblue;
+  height: 80%;
 }
 
 .Image {
-  width: 85%;
-  height: 80%;
-  border-radius: 50%;
+  width: 82%;
+  height: 86%;
+  border-radius: 2%;
+  margin-bottom: 2px;
 }
 
 .PlanetImage {
-  width: 40px;
-  height: 450px;
+  height: 100%;
   flex: 1;
   align-content: center;
   justify-content: center;
@@ -42,9 +45,7 @@
 
 .PlanetDetail {
   padding: 3%;
-  left: 10px;
   flex: 1;
-  width: 40%;
   word-wrap: break-word;
   text-align: left;
   font-size: 18;
@@ -75,4 +76,10 @@
   background-color: black;
   opacity: 1;
   z-index: 1;
+}
+
+.h1 {
+  text-underline-position: below;
+  font-style: inherit;
+  color: aliceblue;
 }

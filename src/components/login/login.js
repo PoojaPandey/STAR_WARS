@@ -4,10 +4,9 @@ import Webservice from '../../services/Service';
 import * as Constant from '../../utils/Constant';
 import { browserHistory } from 'react-router';
 import * as LocalStorage from '../../shared/LocalStorage';
-import video from '../../assets/images/EarthSun.mp4';
 import * as Sentry from '@sentry/browser';
 import * as ErrorConstants from '../../utils/ErrorConstants';
-
+import Loader from '../../assets/images/Loader3.gif';
 /**
  * This class is for Login screen
  */
@@ -20,7 +19,8 @@ class Login extends Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      loading: false
     };
   }
 
@@ -55,6 +55,7 @@ class Login extends Component {
     } else {
       alert(ErrorConstants.ERROR_WRONG_USER);
     }
+    this.setState({ loading: false });
     this.setState({ username: '', password: '' });
   };
 
@@ -102,11 +103,22 @@ class Login extends Component {
    * Handlle button click even of Login button.
    */
   onLoginClick() {
+    this.setState({ loading: true });
     const { username } = this.state;
+    console.log('onLoginClick');
     if (this.validation()) {
       const url = Constant.LOGIN + username;
-      Webservice({ url: url, successCall: this.successCall });
+      Webservice({
+        url: url,
+        successCall: this.successCall,
+        errorCall: error => {
+          this.setState({
+            loading: false
+          });
+        }
+      });
     } else {
+      this.setState({ loading: false });
       alert(ErrorConstants.ERROR_INVALID_INPUT);
     }
   }
@@ -130,7 +142,7 @@ class Login extends Component {
 
   handleChange = event => {
     this.setState({
-      [event.target.id]: event.target.value
+      [event.target.name]: event.target.value
     });
   };
 
@@ -139,25 +151,35 @@ class Login extends Component {
    */
   loginForm() {
     return (
-      <form>
+      <div id="formContent">
         <input
           type="text"
-          id="login"
+          id="username"
           className="fadeIn second"
-          name="login"
-          placeholder="login"
+          name="username"
+          maxLength="30"
+          placeholder="Enter Username"
+          value={this.state.username}
+          onChange={this.handleChange}
         />
-        <br />
         <input
           type="password"
           id="password"
           className="fadeIn third"
-          name="login"
-          placeholder="password"
+          name="password"
+          maxLength="20"
+          placeholder="Enter Password"
+          value={this.state.password}
+          onChange={this.handleChange}
         />
-        <br />
-        <input type="submit" className="fadeIn fourth" value="Log In" />
-      </form>
+        <input
+          type="submit"
+          className="fadeIn fourth"
+          name="submit"
+          onClick={this.onLoginClick.bind(this)}
+          value="Log In"
+        />
+      </div>
     );
   }
 
@@ -175,33 +197,16 @@ class Login extends Component {
           src={require('../../assets/images/star_wars_logo_2.png')}
           alt="logo"
         />
-
-        <div id="formContent">
-          <input
-            type="text"
-            id="username"
-            className="fadeIn second"
-            name="username"
-            placeholder="Enter Username"
-            value={this.state.username}
-            onChange={this.handleChange}
-          />
-          <input
-            type="password"
-            id="password"
-            className="fadeIn third"
-            name="password"
-            placeholder="Enter Password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
-          <input
-            type="submit"
-            className="fadeIn fourth"
-            onClick={this.onLoginClick.bind(this)}
-            value="Log In"
-          />
-        </div>
+        {this.loginForm()}
+        {this.state.loading ? (
+          <div className="d-flex justify-content-center LoaderBackground">
+            <img
+              src={Loader}
+              alt="loader"
+              className="LoaderImage justify-self-center"
+            />
+          </div>
+        ) : null}
       </div>
     );
   }

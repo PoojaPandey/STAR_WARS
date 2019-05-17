@@ -3,6 +3,7 @@ import Login from './components/login/Login';
 import '../src/utils/bootstrap.min.css';
 import SearchScreen from './components/search/SearchScreen';
 import { Router, Route, browserHistory } from 'react-router';
+import PageNotFound from './components/page_not_found/PageNotFround';
 import * as Sentry from '@sentry/browser';
 
 Sentry.init({
@@ -16,11 +17,11 @@ Sentry.init({
 function App() {
   return (
     <Router history={browserHistory}>
-      <Route path="/" component={Login} />
+      <Route path="/" exact component={Login} />
       <Route path="/Login" component={Login} />
       <Route path="/SearchScreen" component={SearchScreen} />
+      <Route path="*" component={PageNotFound} />
     </Router>
   );
 }
-
 export default App;

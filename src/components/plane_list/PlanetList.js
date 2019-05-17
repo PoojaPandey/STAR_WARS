@@ -1,6 +1,7 @@
 import React from 'react';
 import '../plane_list/PlanetList.css';
 import * as Constant from '../../utils/Constant';
+import PropTypes from 'prop-types';
 
 /**
  *
@@ -8,9 +9,7 @@ import * as Constant from '../../utils/Constant';
  * population passed as props.
  */
 function getPopulationPercent(props) {
-  console.log('population', props.population);
   const percent = (props.population / props.max) * Constant.CONST_HUNDRED;
-  console.log('percent', percent);
   return `${percent.toFixed(Constant.DECIMAL_PLACES)}`;
 }
 
@@ -19,8 +18,8 @@ function getPopulationPercent(props) {
  * @param {*} props Function to det populations.
  */
 function setPopulationDefault(props) {
-  console.log('list', props.list);
-  var newData = props.list.map((el) =>
+  // console.log('list', props.list);
+  var newData = props.list.map(el =>
     el.population === Constant.TEXT_UNKOWN ? Constant.TEXT_ZERO : el.population
   );
   return newData;
@@ -31,7 +30,6 @@ function setPopulationDefault(props) {
  * @param {*} props Function to return list of Planet.
  */
 function PlanetList(props) {
-  console.log('PlanetList');
   const { planetList, showPlanetInfo } = props;
   const populationList = setPopulationDefault({ list: planetList });
   const max = populationList.reduce(
@@ -41,10 +39,16 @@ function PlanetList(props) {
   return (
     <div className="container h-100">
       {planetList.map((planet, index) => (
-        <div className="PlanetList " key={planet.name} onClick={() => showPlanetInfo(planet)}>
+        <div
+          className="PlanetList "
+          key={planet.name}
+          onClick={() => showPlanetInfo(planet)}
+        >
           <h4 className="TextPadding">
             {planet.name}
-            <span className="badge badge-danger float-right ">{getRelativePercent(index)}</span>
+            <span className="badge badge-danger float-right ">
+              {getRelativePercent(index)}
+            </span>
           </h4>
           <div className="progress">
             <div
@@ -53,8 +57,6 @@ function PlanetList(props) {
               style={{
                 width: getRelativePercent(index)
               }}
-              aria-valuemin="0"
-              aria-valuemax="100"
             />
           </div>
         </div>
@@ -75,4 +77,8 @@ function PlanetList(props) {
   }
 }
 
+PlanetList.propTypes = {
+  planetList: PropTypes.array.isRequired,
+  showPlanetInfo: PropTypes.func.isRequired
+};
 export default PlanetList;
