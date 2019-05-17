@@ -266,6 +266,19 @@ class SearchSreen extends Component {
   }
 
   /**
+   * Method to update UI according to state change.
+   * By default it returns true.
+   * @param {*} nextProps
+   * @param {*} nextState
+   */
+  shouldComponentUpdate(nextProps, nextState) {
+    const { results, showPopup } = this.state;
+    // console.log('results', results.length);
+    // if (results !== nextState.results || showPopup !== nextState.showPopup)
+    return true;
+    // return false;
+  }
+  /**
    * Method to render the UI for
    * Search screen.
    */
